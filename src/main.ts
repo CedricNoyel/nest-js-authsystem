@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as helmet from 'helmet';
@@ -18,6 +19,8 @@ async function bootstrap() {
     origin: 'http://localhost:3000',
   });
   app.use(helmet());
+
+  app.useGlobalPipes(new ValidationPipe());
   await app.listen(8001);
 }
 
