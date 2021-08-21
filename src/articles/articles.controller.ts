@@ -9,17 +9,20 @@ import {
   Put,
   NotFoundException,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ArticlesService } from './articles.service';
 import { CreateArticleDTO } from './dto/article.dto';
 
 @Controller('Articles')
 export class ArticlesController {
-  constructor(private readonly ArticleService: ArticlesService) {}
+  constructor(private readonly articleService: ArticlesService) {}
 
   @Post()
-  async addCustomer(@Res() res, @Body() CreateArticleDTO: CreateArticleDTO) {
-    const list = await this.ArticleService.create(CreateArticleDTO);
+  @UseGuards(JwtAuthGuard)
+  async create(@Res() res, @Body() CreateArticleDTO: CreateArticleDTO) {
+    const list = await this.articleService.create(CreateArticleDTO);
     return res
       .status(HttpStatus.OK)
       .json({ message: 'Post has been created successfully', list });
@@ -27,23 +30,24 @@ export class ArticlesController {
 
   @Get('all')
   async findAll() {
-    return this.ArticleService.findAll();
+    return this.articleService.findAll();
   }
 
   @Get(':id')
   async findById(@Res() res, @Query('id') id: string) {
-    const lists = await this.ArticleService.findById(id);
+    const lists = await this.articleService.findById(id);
     if (!lists) throw new NotFoundException('Id does not exist!');
     return res.status(HttpStatus.OK).json(lists);
   }
 
   @Put()
+  @UseGuards(JwtAuthGuard)
   async update(
     @Res() res,
     @Query('id') id: string,
     @Body() CreateArticleDTO: CreateArticleDTO,
   ) {
-    const lists = await this.ArticleService.update(id, CreateArticleDTO);
+    const lists = await this.articleService.update(id, CreateArticleDTO);
     if (!lists) throw new NotFoundException('Id does not exist!');
     return res
       .status(HttpStatus.OK)
@@ -51,8 +55,9 @@ export class ArticlesController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   async delete(@Res() res, @Query('id') id: string) {
-    const lists = await this.ArticleService.delete(id);
+    const lists = await this.articleService.delete(id);
     if (!lists) throw new NotFoundException('Id does not exist!');
     return res.status(HttpStatus.OK).json(lists);
   }

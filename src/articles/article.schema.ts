@@ -1,8 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { ApiProperty } from '@nestjs/swagger';
 
 export type ArticleDocument = Article & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Article {
   @Prop()
   id: number;
@@ -17,16 +18,10 @@ export class Article {
   author: string;
 
   @Prop()
-  imageURL: string;
+  imageUrl: string;
 
   @Prop([String])
   tags: string[];
-
-  @Prop()
-  createdAt: Date;
-
-  @Prop()
-  updatedAt: Date;
 }
 
 export const ArticleSchema = SchemaFactory.createForClass(Article);
