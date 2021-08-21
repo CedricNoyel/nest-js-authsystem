@@ -1,10 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { ApiProperty } from '@nestjs/swagger';
 
-export type ArticleDocument = Article & Document;
+export type WorkspaceDocument = Workspace & Document;
 
 @Schema({ timestamps: true })
-export class Article {
+export class Workspace {
   @Prop()
   id: number;
 

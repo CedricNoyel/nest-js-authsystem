@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { ArticlesModule } from './articles/articles.module';
 import { UsersModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { WorkspacesModule } from './workspaces/workspaces.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { MongooseModule } from '@nestjs/mongoose';
         autoCreate: true,
       },
     ),
+    WorkspacesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
