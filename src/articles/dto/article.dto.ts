@@ -5,19 +5,19 @@ export class CreateArticleDTO {
   @ApiProperty({ description: 'The title of the article' })
   @IsNotEmpty()
   @Length(3, 100)
-  title: string;
+  readonly title: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @Length(5, 270)
-  description: string;
+  readonly description: string;
 
   @ApiProperty()
-  author: string;
+  readonly author: string;
 
   @ApiProperty()
-  tags: [string];
+  readonly tags: [string];
 
   @ApiProperty({ description: 'The image related to the article' })
-  imageURL: string;
+  readonly imageURL: string;
 }

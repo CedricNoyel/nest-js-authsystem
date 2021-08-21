@@ -11,11 +11,13 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ArticlesService } from './articles.service';
 import { CreateArticleDTO } from './dto/article.dto';
 
-@Controller('Articles')
+@Controller('articles')
+@ApiTags('articles')
 export class ArticlesController {
   constructor(private readonly articleService: ArticlesService) {}
 

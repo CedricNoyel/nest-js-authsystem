@@ -1,26 +1,42 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreateWorkspaceDto } from './dto/create-workspace.dto';
 import { UpdateWorkspaceDto } from './dto/update-workspace.dto';
+import { Workspace, WorkspaceDocument } from './entities/workspace.entity';
 
 @Injectable()
 export class WorkspacesService {
-  create(createWorkspaceDto: CreateWorkspaceDto) {
-    return 'This action adds a new workspace';
+  constructor(
+    @InjectModel(Workspace.name)
+    private workspaceModel: Model<WorkspaceDocument>,
+  ) {}
+
+  async create(CreateWorkspaceDTO: CreateWorkspaceDto): Promise<any> {
+    const createdCat = new this.workspaceModel(CreateWorkspaceDTO);
+    return createdCat.save();
   }
 
-  findAll() {
-    return `This action returns all workspaces`;
+  async findAll(): Promise<Workspace[]> {
+    return this.workspaceModel.find().exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} workspace`;
+  async findById(id): Promise<Workspace> {
+    const customer = await this.workspaceModel.findById(id).exec();
+    return customer;
   }
 
-  update(id: number, updateWorkspaceDto: UpdateWorkspaceDto) {
-    return `This action updates a #${id} workspace`;
+  async find(req): Promise<any> {
+    return await this.workspaceModel.find(req).exec();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} workspace`;
+  async update(id, CreateWorkspaceDTO: UpdateWorkspaceDto): Promise<any> {
+    return await this.workspaceModel.findByIdAndUpdate(id, CreateWorkspaceDTO, {
+      new: true,
+    });
+  }
+
+  async delete(id): Promise<any> {
+    return await this.workspaceModel.findByIdAndRemove(id);
   }
 }
