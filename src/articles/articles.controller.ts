@@ -9,7 +9,9 @@ import {
   Put,
   NotFoundException,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ArticlesService } from './articles.service';
 import { CreateArticleDTO } from './dto/article.dto';
 
@@ -18,6 +20,7 @@ export class ArticlesController {
   constructor(private readonly articleService: ArticlesService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   async create(@Res() res, @Body() CreateArticleDTO: CreateArticleDTO) {
     const list = await this.articleService.create(CreateArticleDTO);
     return res
@@ -38,6 +41,7 @@ export class ArticlesController {
   }
 
   @Put()
+  @UseGuards(JwtAuthGuard)
   async update(
     @Res() res,
     @Query('id') id: string,
@@ -51,6 +55,7 @@ export class ArticlesController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   async delete(@Res() res, @Query('id') id: string) {
     const lists = await this.articleService.delete(id);
     if (!lists) throw new NotFoundException('Id does not exist!');

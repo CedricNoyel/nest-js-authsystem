@@ -1,4 +1,5 @@
 import {
+  Res,
   Controller,
   Get,
   Post,
@@ -6,6 +7,9 @@ import {
   Patch,
   Param,
   Delete,
+  NotFoundException,
+  HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,27 +20,40 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async create(@Res() res, @Body() CreateUserDto: CreateUserDto) {
+    const list = await this.usersService.create(CreateUserDto);
+    return res
+      .status(HttpStatus.OK)
+      .json({ message: 'User created successfully', list });
   }
 
-  @Get()
-  findAll() {
+  @Get('all')
+  async findAll() {
     return this.usersService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  async findById(@Res() res, @Query('id') id: string) {
+    const lists = await this.usersService.findOne(id);
+    if (!lists) throw new NotFoundException('Id does not exist!');
+    return res.status(HttpStatus.OK).json(lists);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  async update(
+    @Res() res,
+    @Query('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    const lists = await this.usersService.update(id, updateUserDto);
+    if (!lists) throw new NotFoundException('Id does not exist!');
+    return res.status(HttpStatus.OK).json(lists);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.delete(+id);
+  async remove(@Res() res, @Query('id') id: string) {
+    const lists = await this.usersService.delete(id);
+    if (!lists) throw new NotFoundException('Id does not exist!');
+    return res.status(HttpStatus.OK).json(lists);
   }
 }
