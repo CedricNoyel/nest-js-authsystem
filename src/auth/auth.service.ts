@@ -1,28 +1,18 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private usersService: UsersService,
-    private jwtService: JwtService,
-  ) {}
+  constructor(private usersService: UsersService, private jwtService: JwtService) {}
 
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.usersService.findByEmail(email);
-    if (user) {
-      if (user.password !== pass) {
-        throw new HttpException(
-          'Wrong credentials provided',
-          HttpStatus.BAD_REQUEST,
-        );
-      } else {
-        const { password, ...result } = user;
-        return result;
-      }
+    if (user && user.password === pass) {
+      const { password, ...result } = user;
+      return result;
     }
-    throw new HttpException('Email not found', HttpStatus.BAD_REQUEST);
+    return null;
   }
 
   async login(user: any) {

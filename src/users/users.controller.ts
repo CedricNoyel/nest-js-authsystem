@@ -24,9 +24,7 @@ export class UsersController {
   @Post()
   async create(@Res() res, @Body() CreateUserDto: CreateUserDto) {
     const list = await this.usersService.create(CreateUserDto);
-    return res
-      .status(HttpStatus.OK)
-      .json({ message: 'User created successfully', list });
+    return res.status(HttpStatus.OK).json({ message: 'User created successfully', list });
   }
 
   @Get('all')
@@ -42,11 +40,7 @@ export class UsersController {
   }
 
   @Patch(':id')
-  async update(
-    @Res() res,
-    @Query('id') id: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
+  async update(@Res() res, @Query('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     const lists = await this.usersService.update(id, updateUserDto);
     if (!lists) throw new NotFoundException('Id does not exist!');
     return res.status(HttpStatus.OK).json(lists);

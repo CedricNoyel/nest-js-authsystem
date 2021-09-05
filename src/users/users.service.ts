@@ -7,9 +7,7 @@ import { User, UserDocument } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectModel(User.name) private userEntity: Model<UserDocument>,
-  ) {}
+  constructor(@InjectModel(User.name) private userEntity: Model<UserDocument>) {}
 
   async create(CreateUserDto: CreateUserDto): Promise<any> {
     const user = new this.userEntity(CreateUserDto);
