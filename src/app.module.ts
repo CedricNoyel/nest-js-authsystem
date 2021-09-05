@@ -16,7 +16,7 @@ import { WorkspacesModule } from './workspaces/workspaces.module';
       'mongodb+srv://test:test@cluster0.2m0jb.mongodb.net/test?authSource=admin&replicaSet=Cluster0-shard-0&readPreference=primary&appname=mongodb-vscode%200.6.10&ssl=true',
       {
         autoCreate: true,
-      },
+      }
     ),
     WorkspacesModule,
   ],
